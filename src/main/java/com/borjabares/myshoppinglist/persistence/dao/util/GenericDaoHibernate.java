@@ -1,6 +1,7 @@
 package com.borjabares.myshoppinglist.persistence.dao.util;
 
 import com.borjabares.myshoppinglist.persistence.dao.util.exception.InstanceNotFoundException;
+import com.borjabares.myshoppinglist.util.Expander;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+@Repository
 public class GenericDaoHibernate<E> implements GenericDao<E> {
 
     private SessionFactory sessionFactory;
@@ -40,6 +42,20 @@ public class GenericDaoHibernate<E> implements GenericDao<E> {
     @SuppressWarnings("unchecked")
     public E find(long id) {
         E entity = (E) getSession().get(entityClass, id);
+        if (entity == null) {
+            throw new InstanceNotFoundException(id, entityClass.getName());
+        }
+        return entity;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public E find(long id, Expander<E> expander) {
+        E entity = (E) getSession().createQuery("SELECT DISTINCT e FROM "+entityClass.getName()+" e " +
+                expander.getJoins()+
+                " WHERE e.id = :id")
+                .setParameter("id", id)
+                .uniqueResult();
         if (entity == null) {
             throw new InstanceNotFoundException(id, entityClass.getName());
         }

@@ -1,7 +1,7 @@
 package com.borjabares.myshoppinglist.persistence.service.util;
 
 import com.borjabares.myshoppinglist.persistence.dao.util.GenericDao;
-import com.borjabares.myshoppinglist.persistence.dao.util.exception.InstanceNotFoundException;
+import com.borjabares.myshoppinglist.util.Expander;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +14,12 @@ public class GenericServiceImpl<E> implements GenericService<E> {
     @Transactional(readOnly = true)
     public E find(long id) {
         return genericDao.find(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public E find(long id, Expander<E> expander) {
+        return genericDao.find(id, expander);
     }
 
     @Override
