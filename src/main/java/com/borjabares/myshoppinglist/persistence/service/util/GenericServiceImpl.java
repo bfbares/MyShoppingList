@@ -7,8 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class GenericServiceImpl<E> implements GenericService<E> {
-    @Autowired private GenericDao<E> genericDao;
+public abstract class GenericServiceImpl<E> implements GenericService<E> {
+    private GenericDao<E> genericDao;
+
+    public GenericServiceImpl(GenericDao<E> genericDao) {
+        this.genericDao = genericDao;
+    }
 
     @Override
     @Transactional(readOnly = true)

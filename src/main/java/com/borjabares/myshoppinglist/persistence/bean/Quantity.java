@@ -20,6 +20,12 @@ public class Quantity implements Serializable {
     public Quantity() {
     }
 
+    public Quantity(int quantity, Cart cart, Article article) {
+        this.quantity = quantity;
+        this.cart = cart;
+        this.article = article;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id_article_cart")

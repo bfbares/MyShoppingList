@@ -22,6 +22,10 @@ public class Article implements Serializable {
     public Article() {
     }
 
+    public Article(String name) {
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id_article")

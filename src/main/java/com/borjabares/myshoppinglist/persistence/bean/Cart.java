@@ -22,6 +22,7 @@ public class Cart implements Serializable {
     private Collection<Quantity> quantities;
 
     public Cart() {
+        this.created = Calendar.getInstance();
     }
 
     @Id

@@ -1,5 +1,6 @@
 package com.borjabares.myshoppinglist.controller;
 
+import com.borjabares.myshoppinglist.persistence.service.ArticleService;
 import com.borjabares.myshoppinglist.persistence.service.util.GenericService;
 import com.borjabares.myshoppinglist.util.Expander;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-public class GenericController<E> {
-    @Autowired private GenericService<E> genericService;
+public abstract class GenericController<E> {
+    private GenericService<E> genericService;
 
     private Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
-    public GenericController() {
+    public GenericController(GenericService<E> genericService) {
+        this.genericService = genericService;
         this.entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 

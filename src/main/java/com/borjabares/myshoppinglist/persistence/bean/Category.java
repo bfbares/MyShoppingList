@@ -18,6 +18,10 @@ public class Category implements Serializable {
     public Category() {
     }
 
+    public Category(String name) {
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id_category")

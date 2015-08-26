@@ -12,17 +12,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/v1/articles")
 public class ArticleController extends GenericController<Article> {
-
     private final ArticleService articleService;
 
     @Autowired
     public ArticleController(ArticleService articleService) {
+        super(articleService);
         this.articleService = articleService;
     }
 
     @RequestMapping(value = "/{id}/category",method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
-    public Article saveArticle(@RequestBody Category category, @PathVariable(value = "id") long idArticle) {
-        return articleService.addCategory(idArticle, category);
+    public Article saveCategory(@RequestBody Category category, @PathVariable(value = "id") long idArticle) {
+        return articleService.addCategory(idArticle, category.getName());
     }
 }

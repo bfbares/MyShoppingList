@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-@Repository
 public class GenericDaoHibernate<E> implements GenericDao<E> {
 
     private SessionFactory sessionFactory;

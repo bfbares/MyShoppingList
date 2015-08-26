@@ -9,7 +9,7 @@ public class CategoryDaoHibernate extends GenericDaoHibernate<Category> implemen
     @Override
     public Category findByName(String name) {
         return (Category) getSession().createQuery("SELECT c FROM Category c " +
-                "WHERE c.name = :name")
+                "WHERE LOWER(c.name) = LOWER(:name)")
                 .setParameter("name", name)
                 .uniqueResult();
     }
