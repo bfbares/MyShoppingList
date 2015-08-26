@@ -11,7 +11,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "articles_shops")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Price implements Serializable{
+public class Price implements Serializable {
     private static final long serialVersionUID = 3652983376782342032L;
 
     private long id;

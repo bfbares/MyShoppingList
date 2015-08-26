@@ -2,7 +2,6 @@ package com.borjabares.myshoppinglist.persistence.service.util;
 
 import com.borjabares.myshoppinglist.persistence.dao.util.GenericDao;
 import com.borjabares.myshoppinglist.util.Expander;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -34,25 +33,31 @@ public abstract class GenericServiceImpl<E> implements GenericService<E> {
 
     @Override
     @Transactional(readOnly = true)
-    public List<E> getAll(){
+    public List<E> getAll() {
         return genericDao.getAll();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public long getCount(){
+    public List<E> getAll(Expander<E> expander) {
+        return genericDao.getAll(expander);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getCount() {
         return genericDao.getCount();
     }
 
     @Override
     @Transactional
-    public void save(E entity){
+    public void save(E entity) {
         genericDao.save(entity);
     }
 
     @Override
     @Transactional
-    public void remove(long id){
+    public void remove(long id) {
         genericDao.remove(id);
     }
 

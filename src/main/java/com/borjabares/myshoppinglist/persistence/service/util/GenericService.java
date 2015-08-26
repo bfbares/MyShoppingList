@@ -13,6 +13,8 @@ public interface GenericService<E> {
 
     List<E> getAll();
 
+    List<E> getAll(Expander<E> expander);
+
     long getCount();
 
     void save(E entity);

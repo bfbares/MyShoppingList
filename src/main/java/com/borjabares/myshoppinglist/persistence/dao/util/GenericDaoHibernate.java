@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -50,8 +49,8 @@ public class GenericDaoHibernate<E> implements GenericDao<E> {
     @Override
     @SuppressWarnings("unchecked")
     public E find(long id, Expander<E> expander) {
-        E entity = (E) getSession().createQuery("SELECT DISTINCT e FROM "+entityClass.getName()+" e " +
-                expander.getJoins()+
+        E entity = (E) getSession().createQuery("SELECT DISTINCT e FROM " + entityClass.getName() + " e " +
+                expander.getJoins() +
                 " WHERE e.id = :id")
                 .setParameter("id", id)
                 .uniqueResult();
@@ -77,6 +76,14 @@ public class GenericDaoHibernate<E> implements GenericDao<E> {
     @SuppressWarnings("unchecked")
     public List<E> getAll() {
         return getSession().createCriteria(entityClass).list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<E> getAll(Expander<E> expander) {
+        return getSession().createQuery("SELECT DISTINCT e FROM " + entityClass.getName() + " e " +
+                expander.getJoins())
+                .list();
     }
 
     @Override

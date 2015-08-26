@@ -1,7 +1,5 @@
 package com.borjabares.myshoppinglist.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -25,7 +23,8 @@ public class Expander<E> {
         for (String property : properties) {
             try {
                 nodes.add(new ExpandNode(entityClass, property));
-            } catch (NoSuchFieldException ignored) {}
+            } catch (NoSuchFieldException ignored) {
+            }
         }
     }
 
@@ -49,7 +48,7 @@ public class Expander<E> {
             property = properties.get(0);
             Type type = clazz.getDeclaredField(property).getGenericType();
             for (int count = 0; count < 1000; count++) {
-                alias = property.substring(0, 3) + String.format("%3d", random.nextInt(1000));
+                alias = property.substring(0, 3) + String.format("%03d", random.nextInt(1000));
                 if (!takenAliases.contains(alias)) {
                     break;
                 }
@@ -63,7 +62,7 @@ public class Expander<E> {
 
             if (properties.size() > 1) {
                 if (type instanceof ParameterizedType) {
-                    nodes.add(new ExpandNode(((ParameterizedType)type).getActualTypeArguments()[0].getClass(), property, properties.get(1)));
+                    nodes.add(new ExpandNode(((ParameterizedType) type).getActualTypeArguments()[0].getClass(), property, properties.get(1)));
                 } else {
                     nodes.add(new ExpandNode(type.getClass(), property, query));
                 }

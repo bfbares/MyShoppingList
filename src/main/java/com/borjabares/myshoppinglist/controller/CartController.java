@@ -19,14 +19,14 @@ public class CartController extends GenericController<Cart> {
         this.cartService = cartService;
     }
 
-    @RequestMapping(value = "/{id}/article",method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{id}/article", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public Cart saveArticle(@RequestBody ArticleRequest article, @PathVariable(value = "id") long idCart) {
         return cartService.addArticle(idCart, article.getName(), article.getQuantity());
     }
 
 
-    private static class ArticleRequest{
+    private static class ArticleRequest {
         private String name;
         private int quantity;
 

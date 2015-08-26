@@ -17,5 +17,7 @@ public interface GenericDao<E> {
 
     List<E> getAll();
 
+    List<E> getAll(Expander<E> expander);
+
     long getCount();
 }

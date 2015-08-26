@@ -20,7 +20,7 @@ public class ArticleController extends GenericController<Article> {
         this.articleService = articleService;
     }
 
-    @RequestMapping(value = "/{id}/category",method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{id}/category", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public Article saveCategory(@RequestBody Category category, @PathVariable(value = "id") long idArticle) {
         return articleService.addCategory(idArticle, category.getName());

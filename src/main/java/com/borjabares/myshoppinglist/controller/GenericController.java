@@ -1,12 +1,11 @@
 package com.borjabares.myshoppinglist.controller;
 
-import com.borjabares.myshoppinglist.persistence.service.ArticleService;
 import com.borjabares.myshoppinglist.persistence.service.util.GenericService;
 import com.borjabares.myshoppinglist.util.Expander;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -30,6 +29,13 @@ public abstract class GenericController<E> {
     public E find(@PathVariable("id") long id, @RequestParam(value = "expand", defaultValue = "") String expand) {
         Expander<E> expander = new Expander<>(expand, entityClass);
         return genericService.find(id, expander);
+    }
+
+    @RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(OK)
+    public List<E> findAll(@RequestParam(value = "expand", defaultValue = "") String expand) {
+        Expander<E> expander = new Expander<>(expand, entityClass);
+        return genericService.getAll(expander);
     }
 
     @RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
