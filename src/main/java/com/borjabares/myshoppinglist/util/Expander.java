@@ -47,22 +47,27 @@ public class Expander<E> {
             List<String> properties = Arrays.asList(query.split("\\.", 2));
             property = properties.get(0);
             Type type = clazz.getDeclaredField(property).getGenericType();
-            for (int count = 0; count < 1000; count++) {
-                alias = property.substring(0, 3) + String.format("%03d", random.nextInt(1000));
-                if (!takenAliases.contains(alias)) {
-                    break;
-                }
-                if (count == 999) {
-                    throw new NoSuchFieldException();
-                }
-            }
 
-            takenAliases.add(alias);
-            propertyAlias.put(property, alias);
+            if (propertyAlias.containsKey(property)) {
+                alias = propertyAlias.get(property);
+            } else {
+                for (int count = 0; count < 1000; count++) {
+                    alias = property.substring(0, 3) + String.format("%03d", random.nextInt(1000));
+                    if (!takenAliases.contains(alias)) {
+                        break;
+                    }
+                    if (count == 999) {
+                        throw new NoSuchFieldException();
+                    }
+                }
+
+                takenAliases.add(alias);
+                propertyAlias.put(property, alias);
+            }
 
             if (properties.size() > 1) {
                 if (type instanceof ParameterizedType) {
-                    nodes.add(new ExpandNode(((ParameterizedType) type).getActualTypeArguments()[0].getClass(), property, properties.get(1)));
+                    nodes.add(new ExpandNode((Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0], property, properties.get(1)));
                 } else {
                     nodes.add(new ExpandNode(type.getClass(), property, query));
                 }
