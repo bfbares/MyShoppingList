@@ -21,7 +21,7 @@ public class CartController extends GenericController<Cart> {
 
     @RequestMapping(value = "/{id}/article", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
-    public Cart saveArticle(@RequestBody ArticleRequest article, @PathVariable(value = "id") long idCart) {
+    public Cart saveArticle(@PathVariable(value = "id") long idCart, @RequestBody ArticleRequest article) {
         return cartService.addArticle(idCart, article.getName(), article.getQuantity());
     }
 

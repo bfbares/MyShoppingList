@@ -21,6 +21,14 @@ public class Price implements Serializable {
     private Shop shop;
 
     public Price() {
+        date = Calendar.getInstance();
+    }
+
+    public Price(BigDecimal price, Article article, Shop shop) {
+        this();
+        this.price = price;
+        this.article = article;
+        this.shop = shop;
     }
 
     @Id

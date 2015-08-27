@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "shops")
@@ -15,8 +15,8 @@ public class Shop implements Serializable {
 
     private long id;
     private String name;
-    private Collection<Price> prices;
-    private Collection<Cart> carts;
+    private Set<Price> prices;
+    private Set<Cart> carts;
 
     public Shop() {
     }
@@ -42,20 +42,20 @@ public class Shop implements Serializable {
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "shop")
-    public Collection<Price> getPrices() {
+    public Set<Price> getPrices() {
         return prices;
     }
 
-    public void setPrices(Collection<Price> prices) {
+    public void setPrices(Set<Price> prices) {
         this.prices = prices;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "shop")
-    public Collection<Cart> getCarts() {
+    public Set<Cart> getCarts() {
         return carts;
     }
 
-    public void setCarts(Collection<Cart> carts) {
+    public void setCarts(Set<Cart> carts) {
         this.carts = carts;
     }
 }

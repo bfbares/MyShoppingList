@@ -31,7 +31,7 @@ public class Expander<E> {
     public String getJoins() {
         String joins = "";
         for (ExpandNode node : nodes) {
-            joins += " LEFT JOIN FETCH " + node.parentAliasName + "." + node.property + " " + node.alias + " ";
+            joins += " LEFT JOIN FETCH " + node.getParentAliasName() + "." + node.getProperty() + " " + node.getAlias() + " ";
         }
         return joins;
     }
@@ -69,7 +69,7 @@ public class Expander<E> {
                 if (type instanceof ParameterizedType) {
                     nodes.add(new ExpandNode((Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0], property, properties.get(1)));
                 } else {
-                    nodes.add(new ExpandNode(type.getClass(), property, query));
+                    nodes.add(new ExpandNode((Class<?>) type, property, properties.get(1)));
                 }
             }
         }

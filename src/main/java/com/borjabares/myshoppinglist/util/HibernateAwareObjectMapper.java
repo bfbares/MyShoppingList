@@ -11,7 +11,8 @@ public class HibernateAwareObjectMapper extends ObjectMapper {
     private static final long serialVersionUID = -284719090434877186L;
 
     public HibernateAwareObjectMapper() {
-        registerModule(new Hibernate4Module());
+        Hibernate4Module hibernate4Module = new Hibernate4Module();
+        registerModule(hibernate4Module);
         this.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         this.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
         this.setTimeZone(TimeZone.getTimeZone("GMT"));

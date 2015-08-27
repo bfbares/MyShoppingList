@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "carts")
@@ -19,7 +19,7 @@ public class Cart implements Serializable {
     private Calendar created;
     private Calendar bought;
     private Shop shop;
-    private Collection<Quantity> quantities;
+    private Set<Quantity> quantities;
 
     public Cart() {
         this.created = Calendar.getInstance();
@@ -76,11 +76,11 @@ public class Cart implements Serializable {
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart")
-    public Collection<Quantity> getQuantities() {
+    public Set<Quantity> getQuantities() {
         return quantities;
     }
 
-    public void setQuantities(Collection<Quantity> quantities) {
+    public void setQuantities(Set<Quantity> quantities) {
         this.quantities = quantities;
     }
 }

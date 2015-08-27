@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "articles")
@@ -15,9 +15,9 @@ public class Article implements Serializable {
 
     private long id;
     private String name;
-    private Collection<Category> categories;
-    private Collection<Price> prices;
-    private Collection<Quantity> quantities;
+    private Set<Category> categories;
+    private Set<Price> prices;
+    private Set<Quantity> quantities;
 
     public Article() {
     }
@@ -50,29 +50,29 @@ public class Article implements Serializable {
     @JoinTable(name = "articles_categories",
             joinColumns = {@JoinColumn(name = "id_article")},
             inverseJoinColumns = {@JoinColumn(name = "id_category")})
-    public Collection<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(Collection<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
-    public Collection<Price> getPrices() {
+    public Set<Price> getPrices() {
         return prices;
     }
 
-    public void setPrices(Collection<Price> prices) {
+    public void setPrices(Set<Price> prices) {
         this.prices = prices;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
-    public Collection<Quantity> getQuantities() {
+    public Set<Quantity> getQuantities() {
         return quantities;
     }
 
-    public void setQuantities(Collection<Quantity> quantities) {
+    public void setQuantities(Set<Quantity> quantities) {
         this.quantities = quantities;
     }
 }
