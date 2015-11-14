@@ -2,7 +2,9 @@ package com.borjabares.myshoppinglist.controller;
 
 import com.borjabares.myshoppinglist.persistence.bean.Cart;
 import com.borjabares.myshoppinglist.persistence.service.CartService;
+import com.borjabares.myshoppinglist.persistence.service.exception.CartBoughtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -21,8 +23,14 @@ public class CartController extends GenericController<Cart> {
 
     @RequestMapping(value = "/{id}/article", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
-    public Cart saveArticle(@PathVariable(value = "id") long idCart, @RequestBody ArticleRequest article) {
+    public Cart saveArticle(@PathVariable(value = "id") long idCart, @RequestBody ArticleRequest article) throws CartBoughtException {
         return cartService.addArticle(idCart, article.getName(), article.getQuantity());
+    }
+
+    @RequestMapping(value = "/{id}/buy", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Cart buy(@PathVariable(value = "id") long idCart) {
+        return cartService.buy(idCart);
     }
 
 

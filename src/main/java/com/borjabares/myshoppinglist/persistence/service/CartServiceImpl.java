@@ -6,10 +6,13 @@ import com.borjabares.myshoppinglist.persistence.bean.Quantity;
 import com.borjabares.myshoppinglist.persistence.dao.ArticleDao;
 import com.borjabares.myshoppinglist.persistence.dao.CartDao;
 import com.borjabares.myshoppinglist.persistence.dao.QuantityDao;
+import com.borjabares.myshoppinglist.persistence.service.exception.CartBoughtException;
 import com.borjabares.myshoppinglist.persistence.service.util.GenericServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Calendar;
 
 @Service
 public class CartServiceImpl extends GenericServiceImpl<Cart> implements CartService {
@@ -25,9 +28,14 @@ public class CartServiceImpl extends GenericServiceImpl<Cart> implements CartSer
 
     @Override
     @Transactional
-    public Cart addArticle(long idCart, String name, int qty) {
+    public Cart addArticle(long idCart, String name, int qty) throws CartBoughtException {
         Quantity quantity = null;
         Cart cart = cartDao.findWithArticles(idCart);
+
+        if (cart.getBought() != null) {
+            throw new CartBoughtException();
+        }
+
         Article article = articleDao.findByName(name);
 
         if (article == null) {
@@ -46,6 +54,15 @@ public class CartServiceImpl extends GenericServiceImpl<Cart> implements CartSer
 
         quantityDao.save(quantity);
 
+        return cart;
+    }
+
+    @Override
+    @Transactional
+    public Cart buy(long idCart) {
+        Cart cart = cartDao.find(idCart);
+        cart.setBought(Calendar.getInstance());
+        cartDao.save(cart);
         return cart;
     }
 }
