@@ -1,16 +1,21 @@
 package com.borjabares.myshoppinglist.persistence.dao;
 
-import com.borjabares.myshoppinglist.persistence.bean.Category;
 import com.borjabares.myshoppinglist.persistence.dao.util.GenericDaoHibernate;
+import com.borjabares.myshoppinglist.persistence.dao.util.exception.InstanceNotFoundException;
+import com.borjabares.myshoppinglist.persistence.model.Category;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CategoryDaoHibernate extends GenericDaoHibernate<Category> implements CategoryDao {
     @Override
     public Category findByName(String name) {
-        return (Category) getSession().createQuery("SELECT c FROM Category c " +
+        Category category = (Category) getEm().createQuery("SELECT c FROM Category c " +
                 "WHERE LOWER(c.name) = LOWER(:name)")
                 .setParameter("name", name)
-                .uniqueResult();
+                .getSingleResult();
+        if (category == null) {
+            throw new InstanceNotFoundException(name, Category.class.getName());
+        }
+        return category;
     }
 }

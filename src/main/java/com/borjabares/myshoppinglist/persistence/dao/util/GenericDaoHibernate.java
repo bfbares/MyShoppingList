@@ -1,19 +1,21 @@
 package com.borjabares.myshoppinglist.persistence.dao.util;
 
 import com.borjabares.myshoppinglist.persistence.dao.util.exception.InstanceNotFoundException;
-import com.borjabares.myshoppinglist.util.Expander;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.borjabares.myshoppinglist.util.Joiner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 public class GenericDaoHibernate<E> implements GenericDao<E> {
 
-    private SessionFactory sessionFactory;
+    @PersistenceContext(type = PersistenceContextType.TRANSACTION, unitName = "punMsl")
+    private EntityManager entityManager;
 
     private Class<E> entityClass;
 
@@ -23,23 +25,18 @@ public class GenericDaoHibernate<E> implements GenericDao<E> {
                 .getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    @Autowired
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    protected Session getSession() {
-        return sessionFactory.getCurrentSession();
+    protected EntityManager getEm() {
+        return entityManager;
     }
 
     public void save(E entity) {
-        getSession().saveOrUpdate(entity);
+        getEm().persist(entity);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public E find(long id) {
-        E entity = (E) getSession().get(entityClass, id);
+        E entity = getEm().find(entityClass, id);
         if (entity == null) {
             throw new InstanceNotFoundException(id, entityClass.getName());
         }
@@ -48,12 +45,16 @@ public class GenericDaoHibernate<E> implements GenericDao<E> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public E find(long id, Expander<E> expander) {
-        E entity = (E) getSession().createQuery("SELECT DISTINCT e FROM " + entityClass.getName() + " e " +
-                expander.getJoins() +
-                " WHERE e.id = :id")
-                .setParameter("id", id)
-                .uniqueResult();
+    public E find(long id, Joiner<E> joiner) {
+        CriteriaBuilder criteriaBuilder = getEm().getCriteriaBuilder();
+        CriteriaQuery<E> query = criteriaBuilder.createQuery(entityClass);
+
+        Root<?> root = joiner.makeJoins(query, entityClass);
+
+        query.where(criteriaBuilder.equal(root.get("id"), id));
+
+        E entity = getEm().createQuery(query).getSingleResult();
+
         if (entity == null) {
             throw new InstanceNotFoundException(id, entityClass.getName());
         }
@@ -62,32 +63,40 @@ public class GenericDaoHibernate<E> implements GenericDao<E> {
 
     @Override
     public boolean exists(long id) {
-        return getSession().createCriteria(entityClass).add(
-                Restrictions.idEq(id)).setProjection(Projections.id())
-                .uniqueResult() != null;
+        return getEm().find(entityClass, id) != null;
     }
 
     @Override
     public void remove(long id) {
-        getSession().delete(find(id));
+        getEm().remove(find(id));
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<E> getAll() {
-        return getSession().createCriteria(entityClass).list();
+        CriteriaQuery<E> query = getEm().getCriteriaBuilder().createQuery(entityClass);
+        query.from(entityClass);
+
+        return getEm().createQuery(query).getResultList();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<E> getAll(Expander<E> expander) {
-        return getSession().createQuery("SELECT DISTINCT e FROM " + entityClass.getName() + " e " +
-                expander.getJoins())
-                .list();
+    public List<E> getAll(Joiner<E> joiner) {
+        CriteriaBuilder criteriaBuilder = getEm().getCriteriaBuilder();
+        CriteriaQuery<E> query = criteriaBuilder.createQuery(entityClass);
+
+        joiner.makeJoins(query, entityClass);
+
+        return getEm().createQuery(query).getResultList();
     }
 
     @Override
     public long getCount() {
-        return ((Number) getSession().createCriteria(entityClass).setProjection(Projections.rowCount()).uniqueResult()).longValue();
+        CriteriaBuilder criteriaBuilder = getEm().getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        query.select(criteriaBuilder.count(query.from(entityClass)));
+
+        return getEm().createQuery(query).getSingleResult();
     }
 }

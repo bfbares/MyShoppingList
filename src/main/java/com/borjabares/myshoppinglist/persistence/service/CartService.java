@@ -1,6 +1,6 @@
 package com.borjabares.myshoppinglist.persistence.service;
 
-import com.borjabares.myshoppinglist.persistence.bean.Cart;
+import com.borjabares.myshoppinglist.persistence.model.Cart;
 import com.borjabares.myshoppinglist.persistence.service.exception.CartBoughtException;
 import com.borjabares.myshoppinglist.persistence.service.util.GenericService;
 

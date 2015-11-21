@@ -1,7 +1,7 @@
 package com.borjabares.myshoppinglist.persistence.service;
 
-import com.borjabares.myshoppinglist.persistence.bean.Quantity;
 import com.borjabares.myshoppinglist.persistence.dao.QuantityDao;
+import com.borjabares.myshoppinglist.persistence.model.Quantity;
 import com.borjabares.myshoppinglist.persistence.service.util.GenericServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

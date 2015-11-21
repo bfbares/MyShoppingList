@@ -1,4 +1,4 @@
-package com.borjabares.myshoppinglist.persistence.bean;
+package com.borjabares.myshoppinglist.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

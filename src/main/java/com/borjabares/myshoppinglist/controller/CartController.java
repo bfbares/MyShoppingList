@@ -1,6 +1,6 @@
 package com.borjabares.myshoppinglist.controller;
 
-import com.borjabares.myshoppinglist.persistence.bean.Cart;
+import com.borjabares.myshoppinglist.persistence.model.Cart;
 import com.borjabares.myshoppinglist.persistence.service.CartService;
 import com.borjabares.myshoppinglist.persistence.service.exception.CartBoughtException;
 import org.springframework.beans.factory.annotation.Autowired;

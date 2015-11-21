@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Enable usage of @Autowired. -->
+    <context:annotation-config/>
+
+    <!-- Enable component scanning for defining bean with annotations. -->
+    <context:component-scan base-package="com.borjabares.myshoppinglist.persistence"/>
+
+    <!-- For translating native persistence exceptions to Spring's DataAccessException hierarchy. -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <context:property-placeholder location="file:${apps_config_path}/msl/msl.properties" />
+
+    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="${jdbc.jndi.name}"/>
+        <property name="lookupOnStartup" value="true"/>
+        <property name="proxyInterface" value="javax.sql.DataSource"/>
+    </bean>
+
+    <bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="showSql" value="${sql.show}" />
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          p:dataSource-ref="dataSource" p:jpaVendorAdapter-ref="jpaAdapter">
+        <property name="persistenceUnitName" value="punMsl" />
+        <property name="packagesToScan" value="com.borjabares.myshoppinglist.persistence.model" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="hibernate.connection.release_mode" value="after_transaction" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+          p:entityManagerFactory-ref="entityManagerFactory"
+          p:defaultTimeout="120">
+    </bean>
+
+    <bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <!-- Enable the configuration of transactional behavior based on annotations. -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>

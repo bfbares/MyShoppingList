@@ -1,6 +1,6 @@
 package com.borjabares.myshoppinglist.persistence.dao.util;
 
-import com.borjabares.myshoppinglist.util.Expander;
+import com.borjabares.myshoppinglist.util.Joiner;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public interface GenericDao<E> {
 
     E find(long id);
 
-    E find(long id, Expander<E> expander);
+    E find(long id, Joiner<E> joiner);
 
     boolean exists(long id);
 
@@ -17,7 +17,7 @@ public interface GenericDao<E> {
 
     List<E> getAll();
 
-    List<E> getAll(Expander<E> expander);
+    List<E> getAll(Joiner<E> joiner);
 
     long getCount();
 }

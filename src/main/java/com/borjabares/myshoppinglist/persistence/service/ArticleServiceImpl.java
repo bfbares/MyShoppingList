@@ -1,9 +1,9 @@
 package com.borjabares.myshoppinglist.persistence.service;
 
-import com.borjabares.myshoppinglist.persistence.bean.Article;
-import com.borjabares.myshoppinglist.persistence.bean.Category;
 import com.borjabares.myshoppinglist.persistence.dao.ArticleDao;
 import com.borjabares.myshoppinglist.persistence.dao.CategoryDao;
+import com.borjabares.myshoppinglist.persistence.model.Article;
+import com.borjabares.myshoppinglist.persistence.model.Category;
 import com.borjabares.myshoppinglist.persistence.service.util.GenericServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

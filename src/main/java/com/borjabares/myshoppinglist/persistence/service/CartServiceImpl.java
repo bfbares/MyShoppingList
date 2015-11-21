@@ -1,11 +1,11 @@
 package com.borjabares.myshoppinglist.persistence.service;
 
-import com.borjabares.myshoppinglist.persistence.bean.Article;
-import com.borjabares.myshoppinglist.persistence.bean.Cart;
-import com.borjabares.myshoppinglist.persistence.bean.Quantity;
 import com.borjabares.myshoppinglist.persistence.dao.ArticleDao;
 import com.borjabares.myshoppinglist.persistence.dao.CartDao;
 import com.borjabares.myshoppinglist.persistence.dao.QuantityDao;
+import com.borjabares.myshoppinglist.persistence.model.Article;
+import com.borjabares.myshoppinglist.persistence.model.Cart;
+import com.borjabares.myshoppinglist.persistence.model.Quantity;
 import com.borjabares.myshoppinglist.persistence.service.exception.CartBoughtException;
 import com.borjabares.myshoppinglist.persistence.service.util.GenericServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

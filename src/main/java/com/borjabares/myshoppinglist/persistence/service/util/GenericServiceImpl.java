@@ -1,7 +1,7 @@
 package com.borjabares.myshoppinglist.persistence.service.util;
 
 import com.borjabares.myshoppinglist.persistence.dao.util.GenericDao;
-import com.borjabares.myshoppinglist.util.Expander;
+import com.borjabares.myshoppinglist.util.Joiner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -21,8 +21,8 @@ public abstract class GenericServiceImpl<E> implements GenericService<E> {
 
     @Override
     @Transactional(readOnly = true)
-    public E find(long id, Expander<E> expander) {
-        return genericDao.find(id, expander);
+    public E find(long id, Joiner<E> joiner) {
+        return genericDao.find(id, joiner);
     }
 
     @Override
@@ -39,8 +39,8 @@ public abstract class GenericServiceImpl<E> implements GenericService<E> {
 
     @Override
     @Transactional(readOnly = true)
-    public List<E> getAll(Expander<E> expander) {
-        return genericDao.getAll(expander);
+    public List<E> getAll(Joiner<E> joiner) {
+        return genericDao.getAll(joiner);
     }
 
     @Override

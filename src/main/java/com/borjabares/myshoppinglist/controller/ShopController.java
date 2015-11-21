@@ -1,6 +1,6 @@
 package com.borjabares.myshoppinglist.controller;
 
-import com.borjabares.myshoppinglist.persistence.bean.Shop;
+import com.borjabares.myshoppinglist.persistence.model.Shop;
 import com.borjabares.myshoppinglist.persistence.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

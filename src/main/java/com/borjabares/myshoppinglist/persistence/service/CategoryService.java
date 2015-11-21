@@ -1,7 +1,7 @@
 package com.borjabares.myshoppinglist.persistence.service;
 
-import com.borjabares.myshoppinglist.persistence.bean.Article;
-import com.borjabares.myshoppinglist.persistence.bean.Category;
+import com.borjabares.myshoppinglist.persistence.model.Article;
+import com.borjabares.myshoppinglist.persistence.model.Category;
 import com.borjabares.myshoppinglist.persistence.service.util.GenericService;
 
 import java.util.List;
