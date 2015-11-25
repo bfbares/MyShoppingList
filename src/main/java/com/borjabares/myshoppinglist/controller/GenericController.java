@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -18,10 +19,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public abstract class GenericController<E> {
     private GenericService<E> genericService;
 
+    private Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
     public GenericController(GenericService<E> genericService) {
         this.genericService = genericService;
+        this.entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     @RequestMapping(value = "/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
@@ -30,7 +33,7 @@ public abstract class GenericController<E> {
         if (StringUtils.isEmpty(expand)) {
             return genericService.find(id);
         } else {
-            Joiner<E> joiner = new Joiner<>(expand);
+            Joiner<E> joiner = new Joiner<>(expand, entityClass);
             return genericService.find(id, joiner);
         }
     }
@@ -41,7 +44,7 @@ public abstract class GenericController<E> {
         if (StringUtils.isEmpty(expand)) {
             return genericService.getAll();
         } else {
-            Joiner<E> joiner = new Joiner<>(expand);
+            Joiner<E> joiner = new Joiner<>(expand, entityClass);
             return genericService.getAll(joiner);
         }
     }
